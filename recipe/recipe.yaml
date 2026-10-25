@@ -1,0 +1,59 @@
+schema_version: 1
+
+context:
+  name: cubo
+  version: "2026.10.1"
+  python_min: "3.11"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
+  sha256: abc5598dad76f3b3a62df51ffa2dcebd6c324e9349e4fb4e71546bb5fae40974
+
+build:
+  number: 0
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - setuptools >=68
+    - wheel
+    - pip
+  run:
+    - python >=${{ python_min }}
+    - dask-core >=2023.7.0
+    - numpy
+    - pandas >=2.0.3
+    - planetary-computer >=1.0.0
+    - pyproj
+    - pystac-client >=0.7.2
+    - rasterio
+    - scipy >=1.12.0
+    - stackstac >=0.5.1
+    - xarray >=2024.10.0
+
+tests:
+  - python:
+      imports:
+        - cubo
+      pip_check: true
+      python_version:
+        - ${{ python_min }}.*
+        - "*"
+
+about:
+  summary: On-Demand Earth System Data Cubes in Python
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/ESDS-Leipzig/cubo
+  repository: https://github.com/ESDS-Leipzig/cubo
+  documentation: https://cubo.readthedocs.io/en/latest/
+
+extra:
+  recipe-maintainers:
+    - davemlz
